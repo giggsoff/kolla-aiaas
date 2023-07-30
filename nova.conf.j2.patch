@@ -1,0 +1,13 @@
+--- nova.conf.j2.orig	2023-07-24 18:21:30.432502025 +0300
++++ nova.conf.j2	2023-07-28 01:23:28.599549425 +0300
+@@ -17,6 +17,10 @@
+ {% elif enable_nova_fake | bool %}
+ host = {{ ansible_facts.hostname }}_{{ service_name }}
+ compute_driver = fake.FakeDriver
++{% elif nova_compute_virt_type == 'eve_os' %}
++host = {{ ansible_facts.hostname }}_{{ service_name }}
++#compute_driver = eve_os.EVEDriver
++compute_driver = eve_os.EVEDriverWithoutEVENodes
+ {% elif nova_compute_virt_type == 'vmware' %}
+ compute_driver = vmwareapi.VMwareVCDriver
+ {% else %}

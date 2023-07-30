@@ -1,0 +1,8 @@
+#!/bin/bash
+
+DIR=`pwd`
+CDIR=`which kolla-ansible | sed 's?bin/kolla-ansible?/share/kolla-ansible/ansible/roles/nova-cell/templates/?'`
+
+grep -q eve_os $CDIR/nova.conf.j2 && exit
+cd $CDIR && patch -p0 < $DIR/nova.conf.j2.patch
+
