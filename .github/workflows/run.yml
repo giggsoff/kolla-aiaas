@@ -1,0 +1,87 @@
+---
+name: Run kolla
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches: [ main ]
+env:
+  KOLLA_BRANCH: stable/2023.1
+
+jobs:
+  run:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: get project
+        uses: actions/checkout@v3
+      - name: deps install
+        run: |
+          sudo apt install -y git python3-dev libffi-dev gcc libssl-dev
+      - name: ips
+        run: |
+          sudo ip tuntap add dev tap0 mode tap
+          ip a
+      - name: prepare projects
+        run: |
+          python3 -m venv $GITHUB_WORKSPACE/venv
+          source $GITHUB_WORKSPACE/venv/bin/activate
+          pip install -U pip
+          pip install 'ansible>=6,<8'
+          pip install git+https://opendev.org/openstack/kolla-ansible@$KOLLA_BRANCH
+          pip install kolla
+          sudo mkdir -p /etc/kolla
+          sudo chown $USER:$USER /etc/kolla
+          cp -r $GITHUB_WORKSPACE/venv/share/kolla-ansible/etc_examples/kolla/* /etc/kolla
+          cp etc/kolla/kolla-build.conf /etc/kolla/
+      - name: build
+        run: |
+          source $GITHUB_WORKSPACE/venv/bin/activate
+          make horizon nova
+          bin/images2registry.sh
+      - name: deps
+        run: |
+          source $GITHUB_WORKSPACE/venv/bin/activate
+          kolla-ansible install-deps
+          kolla-genpwd
+      - name: adjust config
+        run: |
+          ip=$(ip route show 0.0.0.0/0 dev eth0 | cut -d\  -f7)
+          echo $ip
+          sed -i "s/kolla_internal_vip_address: \"192.168.10.18\"/kolla_internal_vip_address: \"$ip\"/" etc/kolla/globals.yml
+      - name: init
+        run: |
+          source $GITHUB_WORKSPACE/venv/bin/activate
+          make init
+      - name: post deploy
+        run: |
+          source $GITHUB_WORKSPACE/venv/bin/activate
+          pip install python-openstackclient -c https://releases.openstack.org/constraints/upper/master
+          kolla-ansible post-deploy
+          mkdir -p ~/.config/openstack
+          cp /etc/kolla/clouds.yaml ~/.config/openstack/
+      - name: check
+        run: |
+          source $GITHUB_WORKSPACE/venv/bin/activate
+          source /etc/kolla/admin-openrc.sh
+          openstack hypervisor list | grep eve
+      - name: Collect docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v2
+        with:
+          dest: './logs'
+      - name: Store kolla logs
+        if: failure()
+        run: |
+          sudo cp -Lr /var/log/kolla ./logs
+      - name: Tar logs
+        if: failure()
+        run: sudo tar cvzf ./logs.tgz ./logs
+      - name: Upload logs to GitHub
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: logs.tgz
+          path: ./logs.tgz
+      #- name: Setup upterm session
+      #  if: failure()
+      #  uses: lhotari/action-upterm@v1
+      #  with:
+      #    limit-access-to-actor: true
