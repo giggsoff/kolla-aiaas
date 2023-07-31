@@ -1,0 +1,38 @@
+---
+name: Run kolla
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches: [ master ]
+env:
+  KOLLA_VERSION: 2023.1
+
+jobs:
+  run:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: get project
+        uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+      - name: deps install
+        run: |
+          sudo apt install -y libffi-dev gcc libssl-dev
+      - name: prepare projects
+        run: |
+          python3 -m venv ${{ github.workflow }}/venv
+          source ${{ github.workflow }}/venv/bin/activate
+          pip install -U pip
+          pip install 'ansible>=6,<8'
+          pip install git+https://opendev.org/openstack/kolla-ansible@$KOLLA_VERSION
+          pip install kolla
+          sudo mkdir -p /etc/kolla
+          sudo chown $USER:$USER /etc/kolla
+          cp -r ${{ github.workflow }}/venv/share/kolla-ansible/etc_examples/kolla/* /etc/kolla
+      - name: build
+        run: |
+          make build
+      - name: init
+        run: |
+          make init
