@@ -13,16 +13,19 @@ init:
 	$(KOLLA_ANSIBLE) deploy
 	$(KOLLA_ANSIBLE) post-deploy
 
-horizon:
+kolla_patch:
+	bin/patch_kolla
+
+horizon: kolla_patch
 	$(KOLLA_BUILD) horizon
 
 nova_patch:
 	bin/patch_nova
 
-nova_compute:
+nova_compute: kolla_patch
 	$(KOLLA_BUILD) nova-compute #--nouse-dumb-init
 
-nova: nova_patch nova_compute
+nova: kolla_patch nova_patch nova_compute
 	$(KOLLA_BUILD) nova-api
 	$(KOLLA_BUILD) nova-scheduler
 	$(KOLLA_BUILD) nova-conductor

@@ -1,0 +1,21 @@
+--- ./docker/base/Dockerfile.j2	2023-07-31 14:38:10.744795106 +0300
++++ ./docker/base/Dockerfile.j2	2023-07-31 14:38:17.016721990 +0300
+@@ -290,7 +290,6 @@
+ 
+ {# NOTE(hrw): type field defaults to 'asc' which is used for single keys #}
+ {% set base_remote_apt_keys = [
+-   {'name': 'grafana', 'url': 'https://rpm.grafana.com/gpg.key'},
+    {'name': 'influxdb', 'url': 'https://repos.influxdata.com/influxdata-archive_compat.key'},
+    {'name': 'mariadb', 'url': 'https://downloads.mariadb.com/MariaDB/mariadb-keyring-2019.gpg', 'type': 'gpg'},
+    {'name': 'opensearch', 'url': 'https://artifacts.opensearch.org/publickeys/opensearch.pgp'},
+--- ./docker/base/grafana.repo	2023-07-31 14:38:10.744795106 +0300
++++ ./docker/base/grafana.repo	2023-07-31 14:38:21.764666630 +0300
+@@ -2,7 +2,7 @@
+ name=grafana
+ baseurl=https://rpm.grafana.com
+ enabled=0
+-gpgcheck=1
++gpgcheck=0
+ gpgkey=https://rpm.grafana.com/gpg.key
+ sslverify=1
+ sslcacert=/etc/pki/tls/certs/ca-bundle.crt
