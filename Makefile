@@ -1,14 +1,15 @@
 KOLLA_ANSIBLE = kolla-ansible -i all-in-one -vvvv
-KOLLA_BUILD = kolla-build -b ubuntu -d
+# let's use rocky for now
+KOLLA_BUILD = kolla-build -b rocky -d
 
 build: horizon nova deploy
 
 init:
-	cp -i etc/kolla/globals.yml /etc/kolla/
-	cp -i etc/kolla/kolla-build.conf /etc/kolla/
+	cp etc/kolla/globals.yml /etc/kolla/
+	cp etc/kolla/kolla-build.conf /etc/kolla/
 	$(KOLLA_ANSIBLE) bootstrap-servers
 	$(KOLLA_ANSIBLE) prechecks
-	bin/set_virt kvm eve_os
+	bin/set_virt eve_os kvm
 	$(KOLLA_ANSIBLE) deploy
 	$(KOLLA_ANSIBLE) post-deploy
 

@@ -5,7 +5,7 @@
  host = {{ ansible_facts.hostname }}_{{ service_name }}
  compute_driver = fake.FakeDriver
 +{% elif nova_compute_virt_type == 'eve_os' %}
-+host = {{ ansible_facts.hostname }}_{{ service_name }}
++host = {{ ansible_facts.hostname }}
 +#compute_driver = eve_os.EVEDriver
 +compute_driver = eve_os.EVEDriverWithoutEVENodes
  {% elif nova_compute_virt_type == 'vmware' %}
