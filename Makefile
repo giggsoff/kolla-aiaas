@@ -20,7 +20,7 @@ nova_patch:
 	bin/patch_nova
 
 nova_compute:
-	$(KOLLA_BUILD) nova-compute #--nouse-dumb-init
+	$(KOLLA_BUILD) nova-compute --template-override nova-template-overrides.j2 #--nouse-dumb-init
 
 nova: nova_patch nova_compute
 	$(KOLLA_BUILD) nova-api
