@@ -1,0 +1,6 @@
+{% extends parent_template %}
+
+# Nova
+{{ macros.enable_extra_repos(['epel']) }}
+{% set nova_base_packages_append = ['python3-spur','openvpn'] %}
+

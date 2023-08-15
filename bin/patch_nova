@@ -1,8 +1,10 @@
 #!/bin/bash
 
 DIR=`pwd`
-CDIR=`which kolla-ansible | sed 's?bin/kolla-ansible?/share/kolla-ansible/ansible/roles/nova-cell/templates/?'`
 
-grep -q eve_os $CDIR/nova.conf.j2 && exit
-cd $CDIR && patch -p0 < $DIR/nova.conf.j2.patch
+CDIR=`which kolla-ansible | sed 's?bin/kolla-ansible?/share/kolla-ansible/ansible/roles/nova-cell/templates/?'`
+grep -q eve_os $CDIR/nova.conf.j2 || (cd $CDIR && patch -p0 < $DIR/nova.conf.j2.patch)
+
+CDIR=`which kolla-ansible | sed 's?bin/kolla-ansible?/share/kolla/docker/nova/nova-base/?'`
+grep -q epel $CDIR/Dockerfile.j2 || (cd $CDIR && patch -p0 < $DIR/nova.Dockerfile.j2.patch)
 

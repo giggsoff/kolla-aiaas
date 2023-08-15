@@ -1,0 +1,11 @@
+--- Dockerfile.j2.orig	2023-08-15 21:07:30.232580356 +0300
++++ Dockerfile.j2	2023-08-15 22:33:56.441013993 +0300
+@@ -7,7 +7,7 @@
+ 
+ {% import "macros.j2" as macros with context %}
+ 
+-{{ macros.enable_extra_repos(['libvirt', 'openvswitch']) }}
++{{ macros.enable_extra_repos(['libvirt', 'openvswitch', 'epel']) }}
+ {{ macros.configure_user(name='nova', groups='qemu') }}
+ 
+ {% if base_package_type == 'rpm' %}
