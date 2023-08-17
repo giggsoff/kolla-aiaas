@@ -39,9 +39,9 @@ deploy:
 	$(KOLLA_ANSIBLE) post-deploy
 	bin/set_virt eve_os kvm
 	$(KOLLA_ANSIBLE) reconfigure
+	bin/dedup.sh
 
 destroy:
-	$(KOLLA_ANSIBLE) stop --yes-i-really-really-mean-it
 	$(KOLLA_ANSIBLE) destroy --include-images --include-dev --yes-i-really-really-mean-it
 
 pull:
