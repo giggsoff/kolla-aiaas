@@ -3,6 +3,8 @@ name: Run kolla
 on: # yamllint disable-line rule:truthy
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
 env:
   KOLLA_BRANCH: stable/2023.1
 
