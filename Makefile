@@ -13,7 +13,10 @@ init:
 	$(KOLLA_ANSIBLE) deploy
 	$(KOLLA_ANSIBLE) post-deploy
 
-horizon:
+horizon_patch:
+	bin/patch_horizon
+
+horizon: horizon_patch
 	$(KOLLA_BUILD) horizon
 
 nova_patch:
