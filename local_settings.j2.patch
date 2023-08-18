@@ -1,0 +1,32 @@
+--- local_settings.j2.orig      2023-08-17 17:05:03.430594839 +0000
++++ local_settings.j2   2023-08-17 17:05:51.174623785 +0000
+@@ -378,22 +378,22 @@
+ # The OPENSTACK_IMAGE_BACKEND settings can be used to customize features
+ # in the OpenStack Dashboard related to the Image service, such as the list
+ # of supported image formats.
+-#OPENSTACK_IMAGE_BACKEND = {
+-#    'image_formats': [
+-#        ('', _('Select format')),
++OPENSTACK_IMAGE_BACKEND = {
++    'image_formats': [
++        ('', _('Select format')),
+ #        ('aki', _('AKI - Amazon Kernel Image')),
+ #        ('ami', _('AMI - Amazon Machine Image')),
+ #        ('ari', _('ARI - Amazon Ramdisk Image')),
+-#        ('docker', _('Docker')),
++        ('docker', _('Docker')),
+ #        ('iso', _('ISO - Optical Disk Image')),
+ #        ('ova', _('OVA - Open Virtual Appliance')),
+-#        ('qcow2', _('QCOW2 - QEMU Emulator')),
++        ('qcow2', _('QCOW2 - QEMU Emulator')),
+ #        ('raw', _('Raw')),
+ #        ('vdi', _('VDI - Virtual Disk Image')),
+ #        ('vhd', _('VHD - Virtual Hard Disk')),
+ #        ('vmdk', _('VMDK - Virtual Machine Disk')),
+-#    ],
+-#}
++    ],
++}
+ 
+ # The IMAGE_CUSTOM_PROPERTY_TITLES settings is used to customize the titles for
+ # image custom property attributes that appear on image detail pages.
