@@ -44,6 +44,9 @@ deploy:
 	$(KOLLA_ANSIBLE) reconfigure
 	bin/dedup.sh
 
+stop:
+	$(KOLLA_ANSIBLE) --yes-i-really-really-mean-it stop
+
 destroy:
 	$(KOLLA_ANSIBLE) destroy --include-images --include-dev --yes-i-really-really-mean-it
 

@@ -1,6 +1,9 @@
 {% extends parent_template %}
 
 # Nova
-{{ macros.enable_extra_repos(['epel']) }}
-{% set nova_base_packages_append = ['python3-spur','python3-scp','openvpn'] %}
+#{{ macros.enable_extra_repos(['epel']) }}
+#{% set nova_base_packages_append = ['openssh-client', 'python3-spur','python3-scp','openvpn'] %}
+#{% set nova_base_packages_append = ['openssh', 'python3-spur','python3-scp','openvpn'] %}
+#{% set nova_base_packages_append = ['python3-spur','python3-scp','openvpn'] %}
+{% set nova_base_packages_append = ['python3-paramiko','python3-pexpect','python3-scp','openvpn'] %}
 

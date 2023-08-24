@@ -1,0 +1,26 @@
+[eve_os]
+{% if eden_host is defined %}
+eden_host = {{ eden_host }}
+{% endif %}
+{% if eden_port is defined %}
+eden_port = {{ eden_port }}
+{% endif %}
+{% if eden_user is defined %}
+eden_user = {{ eden_user }}
+{% endif %}
+{% if eden_password is defined %}
+eden_password = {{ eden_password }}
+{% endif %}
+{% if eden_key_file is defined %}
+eden_key_file = {{ eden_key_file }}
+{% endif %}
+{% if eden_dir is defined %}
+eden_dir = {{ eden_dir }}
+{% endif %}
+{% if image_tmp_path is defined %}
+image_tmp_path = {{ image_tmp_path }}
+{% endif %}
+{% if eden_tmp_path is defined %}
+eden_tmp_path = {{ eden_tmp_path }}
+{% endif %}
+

@@ -1,5 +1,5 @@
 --- nova.conf.j2.orig	2023-07-24 18:21:30.432502025 +0300
-+++ nova.conf.j2	2023-07-28 01:23:28.599549425 +0300
++++ nova.conf.j2	2023-08-21 17:19:27.566427854 +0300
 @@ -17,6 +17,10 @@
  {% elif enable_nova_fake | bool %}
  host = {{ ansible_facts.hostname }}_{{ service_name }}
@@ -11,3 +11,13 @@
  {% elif nova_compute_virt_type == 'vmware' %}
  compute_driver = vmwareapi.VMwareVCDriver
  {% else %}
+@@ -157,6 +161,9 @@
+ {# see https://github.com/ansible/ansible/issues/58835 #}
+ {% include 'nova.conf.d/libvirt.conf.j2' %}
+ {% endif %}
++{% if nova_compute_virt_type in ['eve_os'] %}
++{% include 'nova.conf.d/eve_os.conf.j2' %}
++{% endif %}
+ {% endif %}
+ 
+ {% if nova_compute_virt_type == "vmware" %}
