@@ -13,6 +13,9 @@ init:
 	$(KOLLA_ANSIBLE) deploy
 	$(KOLLA_ANSIBLE) post-deploy
 
+kolla-ansible-reinstall:
+	pip install --upgrade --force-reinstall kolla-ansible
+
 horizon_patch:
 	bin/patch_horizon
 

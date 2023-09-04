@@ -32,8 +32,8 @@ openstack network create demo-net
 openstack subnet create demo-subnet --allocation-pool start=192.168.0.2,end=192.168.0.254 --network demo-net --subnet-range 192.168.0.0/24 --gateway 192.168.0.1 --dns-nameserver 8.8.8.8 --dns-nameserver 8.8.4.4
 openstack router create demo-router
 
-#neutron router-interface-add demo-router $(openstack subnet show demo-subnet -c id -f value)
-#neutron router-gateway-set demo-router ext-net
+neutron router-interface-add demo-router $(openstack subnet show demo-subnet -c id -f value)
+neutron router-gateway-set demo-router ext-net
 
 openstack keypair create demo-key > ./stackanetes.id_rsa
 

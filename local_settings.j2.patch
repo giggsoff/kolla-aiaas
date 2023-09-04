@@ -1,5 +1,5 @@
---- local_settings.j2.orig      2023-08-17 17:05:03.430594839 +0000
-+++ local_settings.j2   2023-08-17 17:05:51.174623785 +0000
+--- local_settings.j2.orig	2023-08-30 12:49:47.728090378 +0300
++++ local_settings.j2	2023-08-30 14:30:30.980448947 +0300
 @@ -378,22 +378,22 @@
  # The OPENSTACK_IMAGE_BACKEND settings can be used to customize features
  # in the OpenStack Dashboard related to the Image service, such as the list
@@ -18,13 +18,16 @@
  #        ('iso', _('ISO - Optical Disk Image')),
  #        ('ova', _('OVA - Open Virtual Appliance')),
 -#        ('qcow2', _('QCOW2 - QEMU Emulator')),
+-#        ('raw', _('Raw')),
 +        ('qcow2', _('QCOW2 - QEMU Emulator')),
- #        ('raw', _('Raw')),
++        ('raw', _('Raw')),
  #        ('vdi', _('VDI - Virtual Disk Image')),
- #        ('vhd', _('VHD - Virtual Hard Disk')),
- #        ('vmdk', _('VMDK - Virtual Machine Disk')),
+-#        ('vhd', _('VHD - Virtual Hard Disk')),
+-#        ('vmdk', _('VMDK - Virtual Machine Disk')),
 -#    ],
 -#}
++        ('vhd', _('VHD - Virtual Hard Disk')),
++        ('vmdk', _('VMDK - Virtual Machine Disk')),
 +    ],
 +}
  

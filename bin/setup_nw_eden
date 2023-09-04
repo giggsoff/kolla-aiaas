@@ -1,0 +1,27 @@
+#!/bin/bash
+
+OS_IP=192.168.10.18
+EDEN_IP=192.168.10.22
+
+sudo tunctl -t tap0 -u `whoami`
+sudo ip link add vxlan100 type vxlan id 100 local $EDEN_IP remote $OS_IP dstport 0
+sudo brctl addbr br-os
+sudo brctl addif br-os tap0
+sudo brctl addif br-os vxlan100
+
+for i in vxlan100 br-os tap0
+do
+        sudo ip link set $i up
+done
+
+sudo iptables -A FORWARD -i br-os -j ACCEPT
+
+#make build
+
+#./eden config add default
+#./eden setup
+./eden stop
+./eden start --with-tap=tap0
+./eden eve onboard
+./eden network create --type=switch --name=tap-net --uplink=eth2
+
