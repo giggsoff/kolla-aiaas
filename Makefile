@@ -32,7 +32,7 @@ nova: nova_patch nova_compute
 	$(KOLLA_BUILD) nova-api
 	$(KOLLA_BUILD) nova-scheduler
 	$(KOLLA_BUILD) nova-conductor
-	$(KOLLA_BUILD) nova-libvirt
+	#$(KOLLA_BUILD) nova-libvirt
 	$(KOLLA_BUILD) nova-novncproxy
 	$(KOLLA_BUILD) nova-serialproxy
 	$(KOLLA_BUILD) nova-ssh
@@ -40,12 +40,12 @@ nova: nova_patch nova_compute
 deploy:
 	bin/images2registry.sh
 	$(KOLLA_ANSIBLE) prune-images --yes-i-really-really-mean-it
-	bin/set_virt kvm eve_os
+	#bin/set_virt kvm eve_os
 	$(KOLLA_ANSIBLE) deploy
 	$(KOLLA_ANSIBLE) post-deploy
-	bin/set_virt eve_os kvm
-	$(KOLLA_ANSIBLE) reconfigure
-	bin/dedup.sh
+	#bin/set_virt eve_os kvm
+	#$(KOLLA_ANSIBLE) reconfigure
+	#bin/dedup.sh
 
 stop:
 	$(KOLLA_ANSIBLE) --yes-i-really-really-mean-it stop
