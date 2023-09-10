@@ -1,0 +1,20 @@
+#!/bin/bash
+
+sudo tunctl -t tap0 -u `whoami`
+sudo brctl addbr br-eve
+sudo brctl addif br-eve tap0
+
+for i in br-eve tap0 br-int br-tun ovs-system
+do
+        sudo ip link set $i up
+done
+
+#make build
+
+#./eden config add default
+#./eden setup
+./eden stop
+./eden start --with-tap=tap0
+./eden eve onboard
+./eden network create --type=switch --name=tap-net --uplink=eth2
+

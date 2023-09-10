@@ -47,3 +47,14 @@ openstack server delete demo1
 
 openstack server list
 
+# Multinode tesetbed
+openstack image create --container-format bare --disk-format qcow2 --file web-server.qcow2 web-server
+openstack server create --flavor m1.tiny --key-name demo-key --network demo-net --image web-server --availability-zone nova:eden-1 web-server1
+openstack server create --flavor m1.tiny --key-name demo-key --network demo-net --image web-server --availability-zone nova:eden-2 web-server2
+IP=`openstack floating ip create --project admin --subnet ext-subnet ext-net | grep floating_ip_address | cut -f 3 -d '|'`
+openstack floating ip list
+openstack server add floating ip web-server1 $IP
+IP=`openstack floating ip create --project admin --subnet ext-subnet ext-net | grep floating_ip_address | cut -f 3 -d '|'`
+openstack floating ip list
+openstack server add floating ip web-server2 $IP
+openstack server list
