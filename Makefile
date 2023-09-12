@@ -1,4 +1,5 @@
-KOLLA_ANSIBLE = kolla-ansible -i all-in-one -vvvv
+#KOLLA_ANSIBLE = kolla-ansible -i all-in-one -vvvv
+KOLLA_ANSIBLE = kolla-ansible -i multinode -vvvv
 # let's use rocky for now
 KOLLA_BUILD = kolla-build -b rocky -d
 
