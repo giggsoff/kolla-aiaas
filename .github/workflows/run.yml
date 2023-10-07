@@ -16,19 +16,30 @@ jobs:
         uses: actions/checkout@v3
       - name: deps install
         run: |
-          sudo apt install -y git python3-dev libffi-dev gcc libssl-dev
+          sudo apt install -y git python3-dev libffi-dev gcc libssl-dev qemu-utils qemu-system-x86 jq
       - name: ips
         run: |
           sudo ip tuntap add dev tap0 mode tap
           ip a
-      - name: prepare dummy eden for testing and adjust all-in-one config
+      - name: prepare eden for testing and adjust all-in-one config
         run: |
-          sudo useradd -m eden
-          echo "eden:Adam&Eve" | sudo chpasswd
-          sudo su - eden -c "mkdir -p /home/eden/eden"
-          sudo ln -s /usr/bin/true /home/eden/eden/eden
           ip=$(ip route show 0.0.0.0/0 dev eth0 | cut -d\  -f7)
           sed -i "s/192.168.10.22/$ip/" ./all-in-one
+          sudo useradd -m eden
+          echo "eden:Adam&Eve" | sudo chpasswd
+          sudo usermod -aG docker eden
+          sudo mkdir /home/eden/eden
+          docker run -v /home/eden/eden:/out lfedge/eden:0.9.1 cp -a /eden/. /out/
+          sudo chown -R eden /home/eden/eden
+          sudo su - eden -c "newgrp docker && \
+          cd /home/eden/eden && \
+          ./eden config add && \
+          ./eden config set default --key=eve.accel --value=false && \
+          ./eden config set default --key=eve.cpu --value=2 && \
+          ./eden config set default --key=eve.ram --value=2048 && \
+          ./eden setup && \
+          ./eden start && \
+          ./eden eve onboard"
       - name: prepare projects
         run: |
           python3 -m venv $GITHUB_WORKSPACE/venv
@@ -71,21 +82,21 @@ jobs:
         run: |
           source $GITHUB_WORKSPACE/venv/bin/activate
           source /etc/kolla/admin-openrc.sh
-          openstack hypervisor list
+          openstack hypervisor list|grep eve
       - name: Collect docker logs on failure
-        if: failure()
+        if: always()
         uses: jwalton/gh-docker-logs@v2
         with:
           dest: './logs'
       - name: Store kolla logs
-        if: failure()
+        if: always()
         run: |
           sudo cp -Lr /var/log/kolla ./logs
       - name: Tar logs
-        if: failure()
+        if: always()
         run: sudo tar cvzf ./logs.tgz ./logs
       - name: Upload logs to GitHub
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@master
         with:
           name: logs.tgz
