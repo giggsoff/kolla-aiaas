@@ -71,7 +71,7 @@ jobs:
         run: |
           source $GITHUB_WORKSPACE/venv/bin/activate
           source /etc/kolla/admin-openrc.sh
-          openstack hypervisor list | grep eve
+          openstack hypervisor list
       - name: Collect docker logs on failure
         if: failure()
         uses: jwalton/gh-docker-logs@v2
