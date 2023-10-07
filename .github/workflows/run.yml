@@ -21,6 +21,14 @@ jobs:
         run: |
           sudo ip tuntap add dev tap0 mode tap
           ip a
+      - name: prepare dummy eden for testing and adjust all-in-one config
+        run: |
+          sudo useradd -m eden
+          echo "eden:Adam&Eve" | sudo chpasswd
+          sudo su - eden -c "mkdir -p /home/eden/eden"
+          sudo ln -s /usr/bin/true /home/eden/eden/eden
+          ip=$(ip route show 0.0.0.0/0 dev eth0 | cut -d\  -f7)
+          sed -i "s/192.168.10.22/$ip/" ./all-in-one
       - name: prepare projects
         run: |
           python3 -m venv $GITHUB_WORKSPACE/venv
