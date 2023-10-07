@@ -7,6 +7,8 @@ sudo ip link add vxlan100 type vxlan id 100 local $OS_IP remote $EDEN_IP dstport
 sudo ip a add 172.16.0.1/24 dev br-ex
 sudo brctl addbr br-eve
 sudo brctl addif br-eve vxlan100
+# disable mac learning allow us to have multiple VMs in one EVE-OS
+sudo brctl setageing br-eve 0
 
 for i in br-eve vxlan100 br-ex br-int br-tun ovs-system
 do
