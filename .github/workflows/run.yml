@@ -51,7 +51,7 @@ jobs:
       - name: init
         run: |
           source $GITHUB_WORKSPACE/venv/bin/activate
-          make init
+          make KOLLA_ANSIBLE="kolla-ansible -i all-in-one -vvvv" init
       - name: post deploy
         run: |
           source $GITHUB_WORKSPACE/venv/bin/activate
