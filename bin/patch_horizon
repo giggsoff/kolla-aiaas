@@ -10,4 +10,4 @@ then
 	patch -p0 < $DIR/local_settings.j2.patch
 fi
 
-cp custom_local_settings.j2 $CDIR/
+cp $DIR/custom_local_settings.j2 $CDIR/
